@@ -1,8 +1,8 @@
-import { Day } from "../day";
+import {Day} from "../day";
 
 class Day0 extends Day {
 
-    constructor(){
+    constructor() {
         super(0);
     }
 
