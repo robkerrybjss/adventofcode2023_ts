@@ -12,7 +12,7 @@ class Day2 extends Day {
         const blueMax = 14;
         let games: string[] = input.split("\n");
         let total = 0;
-        games.find(game => {
+        games.forEach(game => {
             let possible = true;
             let idMatch = game.match(/\d+/);
             const gameId = idMatch != null ? idMatch[0] : "0";
