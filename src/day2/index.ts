@@ -12,13 +12,13 @@ class Day2 extends Day {
         const blueMax = 14;
         let games: string[] = input.split("\n");
         let total = 0;
-        games.forEach(game => {
+        games.find(game => {
             let possible = true;
             let idMatch = game.match(/\d+/);
             const gameId = idMatch != null ? idMatch[0] : "0";
 
             let rounds = game.substring(game.indexOf(":") + 2).split("; ");
-            rounds.forEach(round => {
+            rounds.find(round => { // find instead of forEach to shortcircuit on first impossible round
                 let draws = round.split(", ");
                 let redCount = 0;
                 let greenCount = 0;
@@ -42,6 +42,7 @@ class Day2 extends Day {
                 });
                 if (redCount > redMax || greenCount > greenMax || blueCount > blueMax) {
                     possible = false;
+                    return true;
                 }
             });
             if (possible) {
@@ -55,9 +56,6 @@ class Day2 extends Day {
         let games: string[] = input.split("\n");
         let total = 0;
         games.forEach(game => {
-            let possible = true;
-            let idMatch = game.match(/\d+/);
-            const gameId = idMatch != null ? idMatch[0] : "0";
             let redMin = 0;
             let greenMin = 0;
             let blueMin = 0;
