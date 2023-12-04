@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Run Days
 
 on: [push]
 
@@ -17,3 +17,4 @@ jobs:
       - run: npm run start 1
       - run: npm run start 2
       - run: npm run start 3
+      - run: npm run start 4
