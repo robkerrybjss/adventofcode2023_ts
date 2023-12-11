@@ -23,3 +23,4 @@ jobs:
       - run: npm run start 7
       - run: npm run start 8
       - run: npm run start 9
+      - run: npm run start 11
