@@ -11,59 +11,38 @@ class Day11 extends Day {
         let distances = galaxies.flatMap(
             (galaxyStart, i) => galaxies.slice(i+1).map( galaxyEnd => Math.abs(galaxyEnd.x - galaxyStart.x) +  Math.abs(galaxyEnd.y - galaxyStart.y) ))
 
-        console.log(distances)
-
         return "" + [...distances].reduce((partialSum, a) => partialSum + a, 0);
     }
 
     solveForPartTwo(input: string): string {
         const galaxies = this.parseInputToGalaxies(input, 999999);
-        let distances = galaxies.flatMap(
-            (galaxyStart, i) => galaxies.slice(i+1).map( galaxyEnd => Math.abs(galaxyEnd.x - galaxyStart.x) +  Math.abs(galaxyEnd.y - galaxyStart.y) ))
+        let sum = 0;
+        galaxies.flatMap(
+            (galaxyStart, i) => galaxies.slice(i+1).map( galaxyEnd => sum += (Math.abs(galaxyEnd.x - galaxyStart.x) +  Math.abs(galaxyEnd.y - galaxyStart.y) )))
 
-        console.log(distances)
-
-        return "" + [...distances].reduce((partialSum, a) => partialSum + a, 0);
+        return "" + sum;
     }
 
     private parseInputToGalaxies(input: string, growthFactor: number) {
-        let rows: string[][] = [];
-        input.split("\n").forEach(row => {
-            rows.push(row.split(""))
-            if (new Set(row.split("")).size === 1) {
-                for (let i = 0; i < growthFactor; i++) {
-                    rows.push(row.split(""))
-                }
-            }
-        })
-        let transposedRows = this.transposeArray(rows);
-        let cols: string[][] = [];
-        transposedRows.forEach(row => {
-            cols.push(row)
-            if (new Set(row).size === 1) {
-                for (let i = 0; i < growthFactor; i++) {
-                    cols.push(row)
-                }
-            }
-        })
+
+        const expandingRows = input.split("\n")
+            .map((v, i) => [v, i])
+            .filter(([v, i]) => !(v as string).includes("#"))
+            .map(([v, i]) => i as number);
+        const inputLengthArray = Array.from(Array(input.split("\n").length).keys());
+        const expandingCols = Array.from(Array(input.split("\n")[0].length).keys()).filter((i) =>
+            inputLengthArray.every((j) => input.split("\n")[j][i] == ".")
+        );
         let galaxies: Position[] = [];
-        cols.forEach((col, xIndex) => {
-            col.forEach((item, yIndex) => {
+        input.split("\n").forEach((col, xIndex) => {
+            col.split("").forEach((item, yIndex) => {
                 if (item === '#') {
-                    galaxies.push(new Position(xIndex, yIndex));
+                    galaxies.push(new Position(xIndex + (expandingRows.filter((row) => row < xIndex).length * growthFactor),
+                        yIndex+ (expandingCols.filter((col) => col < yIndex).length * growthFactor)));
                 }
             })
         })
         return galaxies;
-    }
-
-    private transposeArray(array: string[][]): string[][] {
-        for (let i = 0; i < array.length; i++) {
-            for (let j = 0; j < i; j++) {
-                [array[i][j], array[j][i]] = [array[j][i], array[i][j]];
-            }
-        }
-        return array;
     }
 }
 
